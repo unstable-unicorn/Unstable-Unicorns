@@ -1,39 +1,49 @@
 package com.unstable.unicorn.card;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CardLibrary {
-    public static void main(String[] args) throws IOException {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            URL cardYmlFileLocation = CardLibrary.class.getResource("/cards/cards.yml");
-            UnicornCard unicornCard = mapper.readValue(new File(cardYmlFileLocation.toURI()), UnicornCard.class);
-            System.out.println(ReflectionToStringBuilder.toString(unicornCard ,ToStringStyle.MULTI_LINE_STYLE));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private static Logger logger = LoggerFactory.getLogger(CardLibrary.class);
 
     private static CardLibrary instance;
-    private HashMap<Integer, Card> library;
+    private HashMap<Integer, UnicornCard> unicornCards;
 
-    public CardLibrary() {
-        instantiateCards();
+    /**
+     * I have decided to use YML property file to store all properties of cards.
+     * Instead of looking them up inside a MYSQL database.
+     * Retrieve all (Unicorn, Magic, Instant) cards from YAML properties files.
+     * Store all of the cards into each of the HashMaps, this allows O(1) lookup.
+     */
+    private void instantiateCards() {
+        getAllUnicornCards();
     }
 
-    private void instantiateCards() {
-        if (library == null) {
-            library = new HashMap<>();
+    @SuppressWarnings("unchecked")
+    private void getAllUnicornCards() {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        try {
+            URL cardYmlFileLocation = CardLibrary.class.getResource("/cards/unicorn-cards.yml");
+            Map<String, List<UnicornCard>> unicornCard = mapper.readValue(new File(cardYmlFileLocation.toURI()), Map.class);
+
+            for(Map.Entry<String, List<UnicornCard>> entry : unicornCard.entrySet()) {
+                List<UnicornCard> values = entry.getValue();
+                if(values != null) {
+                    for (Object value : values) {
+                        System.out.println(String.valueOf(value));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("getAllUnicornCards() -> Failed to retrieve unicorn cards from property file");
         }
     }
 
