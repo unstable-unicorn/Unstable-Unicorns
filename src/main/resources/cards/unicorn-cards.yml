@@ -4,24 +4,24 @@ unicorns:
   type: Unicorn
   effect: When this card enters your stable, you may bring an Upgrade card directly into play from your hand
   description:
-  basic: false
-  magical: true
-  baby: false
+  basic: 'false'
+  magical: 'true'
+  baby: 'false'
 
 - id: '2'
   name: LLAMACORN
   type: Unicorn
   effect: When this card enters your Stable, each player must DISCARD a card, shuffle the discard pile back into the deck.
   description:
-  basic: false
-  magical: true
-  baby: false
+  basic: 'false'
+  magical: 'true'
+  baby: 'false'
 
 - id: '3'
   name: BABY UNICORN
   type: Unicorn
   effect: If this card would be sacrificed, destroyed, or returned to your hand, return it to the Nursery instead.
   description:
-  basic: false
-  magical: false
-  baby: true
+  basic: 'false'
+  magical: 'false'
+  baby: 'true'
