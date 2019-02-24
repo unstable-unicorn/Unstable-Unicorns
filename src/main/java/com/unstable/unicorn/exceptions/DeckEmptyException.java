@@ -1,4 +1,5 @@
 package com.unstable.unicorn.exceptions;
 
-public class DeckEmptyException {
+public class DeckEmptyException extends Exception{
+
 }

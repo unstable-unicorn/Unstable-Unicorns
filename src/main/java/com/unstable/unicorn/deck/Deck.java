@@ -1,24 +1,18 @@
-package com.unstable.unicorn.Deck;
+package com.unstable.unicorn.deck;
 
-import com.unstable.unicorn.card.Card;
 import com.unstable.unicorn.card.CardLibrary;
 import com.unstable.unicorn.card.Type;
+import com.unstable.unicorn.exceptions.DeckEmptyException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-class DeckEmptyException extends Exception{
-
-}
-
 public class Deck {
-
     private static Random random = new Random();
     private ArrayList<Integer> cardIDs = new ArrayList<>();
-    private CardLibrary cardLibrary = CardLibrary.getInstance();
 
-    public Integer drawCard() throws DeckEmptyException
+    public int drawCard() throws DeckEmptyException
     {
         if (cardIDs.isEmpty()) {
             throw new DeckEmptyException();
@@ -27,7 +21,7 @@ public class Deck {
         }
     }
 
-    public ArrayList<Integer> drawCards(int numberOfCard){
+    public ArrayList<Integer> drawCards(int numberOfCard) {
         ArrayList<Integer> cardsDrew = new ArrayList<>();
         for (int i = 0; i < numberOfCard; i++){
             if (cardIDs.isEmpty()){ break; }
@@ -37,8 +31,9 @@ public class Deck {
     }
 
     public Integer drawCardIDWithExactName(String name) {
+        CardLibrary library = CardLibrary.getInstance();
         for(int i = 0; i < cardIDs.size(); i++){
-            if (cardLibrary.getCardWithID(cardIDs.get(i)).getName().equals(name)) {
+            if (library.getCardWithID(cardIDs.get(i)).getName().equals(name)) {
                 return cardIDs.remove(i);
             }
         }
@@ -82,6 +77,7 @@ public class Deck {
      * matched the keyword
      */
     public ArrayList<Integer> getCardsWithKeyword(String keyword){
+        CardLibrary cardLibrary = CardLibrary.getInstance();
         ArrayList<Integer> candidates = new ArrayList<>();
         for(Integer cardID: cardIDs){
             if (cardLibrary.getCardNameWithID(cardID).contains(keyword)){
@@ -97,6 +93,7 @@ public class Deck {
      * matches the parameter type
      */
     public ArrayList<Integer> getCardsOfType(Type type){
+        CardLibrary cardLibrary = CardLibrary.getInstance();
         ArrayList<Integer> candidates = new ArrayList<>();
         for(Integer cardID : cardIDs){
             if(cardLibrary.getCardTypeWithID(cardID) == type){
@@ -107,6 +104,7 @@ public class Deck {
     }
 
     public boolean containCardWithKeyword(String keyword) {
+        CardLibrary cardLibrary = CardLibrary.getInstance();
         for (Integer cardID : cardIDs) {
             if (cardLibrary.getCardNameWithID(cardID).contains(keyword)){
                 return true;
@@ -121,6 +119,7 @@ public class Deck {
 
     @Override
     public String toString() {
+        CardLibrary cardLibrary = CardLibrary.getInstance();
         StringBuilder deckStringBuilder = new StringBuilder();
         for (Integer cardID : cardIDs){
             deckStringBuilder.append(cardLibrary.getCardNameWithID(cardID));

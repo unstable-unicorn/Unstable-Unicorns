@@ -41,7 +41,7 @@ public class CardLibrary {
             URL cardYmlFileLocation = CardLibrary.class.getResource("/cards/unicorn-cards.yml");
             Map<String, List<LinkedHashMap<String, String>>> listMap = mapper.readValue(new File(cardYmlFileLocation.toURI()), Map.class);
 
-            for(Map.Entry<String, List<LinkedHashMap<String, String>>> entry : listMap.entrySet()) {
+            for (Map.Entry<String, List<LinkedHashMap<String, String>>> entry : listMap.entrySet()) {
                 List<LinkedHashMap<String, String>> values = entry.getValue();
                 // parse all of the attributes in the HashMap
                 // and store them inside an UnicornCard class, then add the unicorn class to the HashMap
