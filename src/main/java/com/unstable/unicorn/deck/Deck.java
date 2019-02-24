@@ -25,7 +25,7 @@ public class Deck {
         ArrayList<Integer> cardsDrew = new ArrayList<>();
         for (int i = 0; i < numberOfCard; i++){
             if (cardIDs.isEmpty()){ break; }
-            else { cardsDrew.add(cardIDs.remove(cardIDs.size())); }
+            else { cardsDrew.add(cardIDs.remove(cardIDs.size()-1)); }
         }
         return cardsDrew;
     }
@@ -51,30 +51,31 @@ public class Deck {
         }
     }
 
-    public void shuffleIntoDeck(Integer cardID){
+    public void shuffleIntoDeck(Integer card){
         if (cardIDs.isEmpty()){
-            cardIDs.add(cardID);
+            cardIDs.add(card);
             return;
         }
-        cardIDs.add(random.nextInt(cardIDs.size()+1), cardID);
+        cardIDs.add(random.nextInt(cardIDs.size()+1), card);
     }
 
-    public void shuffleIntoDeck(ArrayList<Integer> cardIDList){
-        if (cardIDList.isEmpty()) {
+    public void shuffleIntoDeck(ArrayList<Integer> cardList){
+        if (cardList.isEmpty()) {
             return;
         }
         if(cardIDs.isEmpty()) {
-            cardIDs.add(cardIDList.remove(0));
+            cardIDs.add(cardList.remove(0));
         }
-        for(Integer cardID : cardIDList){
-            cardIDs.add(random.nextInt(cardIDs.size()+1), cardID);
+        for(Integer card : cardList){
+            cardIDs.add(random.nextInt(cardIDs.size()+1), card);
         }
     }
 
     /**
-     * This method does not remove cardIDs from the deck
-     * It returns an ArrayList of Integer of cards that
-     * matched the keyword
+     * This method does not remove cards from the deck
+     * It returns an ArrayList of Cards that matched the keyword
+     * @param keyword
+     * @return ArrayList of Card with keyword in Name
      */
     public ArrayList<Integer> getCardsWithKeyword(String keyword){
         CardLibrary cardLibrary = CardLibrary.getInstance();
@@ -88,9 +89,10 @@ public class Deck {
     }
 
     /**
-     * This method does not remove cardIDs from the deck
-     * It returns an ArrayList of Integer of the cards that
-     * matches the parameter type
+     * This method does not remove cards from the deck
+     * It returns an ArrayList of Cards of the parameter type
+     * @param type
+     * @return ArrayList of Card of Type type
      */
     public ArrayList<Integer> getCardsOfType(Type type){
         CardLibrary cardLibrary = CardLibrary.getInstance();
@@ -121,9 +123,8 @@ public class Deck {
     public String toString() {
         CardLibrary cardLibrary = CardLibrary.getInstance();
         StringBuilder deckStringBuilder = new StringBuilder();
-        for (Integer cardID : cardIDs){
-            deckStringBuilder.append(cardLibrary.getCardNameWithID(cardID));
-            deckStringBuilder.append("\n");
+        for (Integer card : cardIDs){
+            deckStringBuilder.append(card.toString() + "\n");
         }
         return deckStringBuilder.toString();
     }
