@@ -72,4 +72,16 @@ public class CardLibrary {
 
         return instance;
     }
+
+    public Card getCardWithID(int id){
+        return unicornCards.get(id);
+    }
+
+    public String getCardNameWithID(int id){
+        return getCardWithID(id).getName();
+    }
+
+    public Type getCardTypeWithID(int id){
+        return getCardWithID(id).getType();
+    }
 }

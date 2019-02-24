@@ -1,109 +1,114 @@
 package com.unstable.unicorn.Deck;
 
 import com.unstable.unicorn.card.Card;
+import com.unstable.unicorn.card.CardLibrary;
 import com.unstable.unicorn.card.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+class DeckEmptyException extends Exception{
+
+}
+
 public class Deck {
 
     private static Random random = new Random();
-    private ArrayList<Card> Cards = new ArrayList<Card>();
+    private ArrayList<Integer> cardIDs = new ArrayList<>();
+    private CardLibrary cardLibrary = CardLibrary.getInstance();
 
-    public Card drawCard(){
-        if (Cards.isEmpty()) {
-            return null;
+    public Integer drawCard() throws DeckEmptyException
+    {
+        if (cardIDs.isEmpty()) {
+            throw new DeckEmptyException();
         } else {
-            return Cards.remove(Cards.size()-1);
+            return cardIDs.remove(cardIDs.size()-1);
         }
     }
 
-    public ArrayList<Card> drawCards(int numberOfCard){
-        ArrayList<Card> cardsDrew = new ArrayList<Card>();
+    public ArrayList<Integer> drawCards(int numberOfCard){
+        ArrayList<Integer> cardsDrew = new ArrayList<>();
         for (int i = 0; i < numberOfCard; i++){
-            if (Cards.isEmpty()){ break; }
-            else { cardsDrew.add(Cards.remove(Cards.size()-1)); }
+            if (cardIDs.isEmpty()){ break; }
+            else { cardsDrew.add(cardIDs.remove(cardIDs.size())); }
         }
         return cardsDrew;
     }
 
-    public Card drawCardWithExactName(String name) {
-        for(int i=0; i < Cards.size(); i++){
-            if (Cards.get(i).getName().equals(name)) {
-                return Cards.remove(i);
+    public Integer drawCardIDWithExactName(String name) {
+        for(int i = 0; i < cardIDs.size(); i++){
+            if (cardLibrary.getCardWithID(cardIDs.get(i)).getName().equals(name)) {
+                return cardIDs.remove(i);
             }
         }
         return null;
     }
 
     public void shuffle() {
-        if (Cards.isEmpty()){
+        if (cardIDs.isEmpty()){
             return;
         }
-        for (int sourcePos = Cards.size()-1; sourcePos > 0; sourcePos--){
+        for (int sourcePos = cardIDs.size()-1; sourcePos > 0; sourcePos--){
             //generate destination position with bound 0<=destinationPos<=sourcePos
             int destinationPos = random.nextInt(sourcePos+1);
-            Collections.swap(Cards, sourcePos, destinationPos);
+            Collections.swap(cardIDs, sourcePos, destinationPos);
         }
     }
 
-    public void shuffleIntoDeck(Card card){
-        if (Cards.isEmpty()){
-            Cards.add(card);
+    public void shuffleIntoDeck(Integer cardID){
+        if (cardIDs.isEmpty()){
+            cardIDs.add(cardID);
             return;
         }
-        Cards.add(random.nextInt(Cards.size()+1), card);
+        cardIDs.add(random.nextInt(cardIDs.size()+1), cardID);
     }
 
-    public void shuffleIntoDeck(ArrayList<Card> cardList){
-        if (cardList.isEmpty()) {
+    public void shuffleIntoDeck(ArrayList<Integer> cardIDList){
+        if (cardIDList.isEmpty()) {
             return;
         }
-        if(Cards.isEmpty()) {
-            Cards.add(cardList.remove(0));
+        if(cardIDs.isEmpty()) {
+            cardIDs.add(cardIDList.remove(0));
         }
-        for(Card card : cardList){
-            Cards.add(random.nextInt(Cards.size()+1), card);
+        for(Integer cardID : cardIDList){
+            cardIDs.add(random.nextInt(cardIDs.size()+1), cardID);
         }
     }
 
     /**
-     * This method does not remove cards from the deck
-     * It returns an ArrayList of Cards that matched the keyword
-     * @param keyword
-     * @return ArrayList of Card with keyword in Name
+     * This method does not remove cardIDs from the deck
+     * It returns an ArrayList of Integer of cards that
+     * matched the keyword
      */
-    public ArrayList<Card> getCardsWithKeyword(String keyword){
-        ArrayList<Card> candidates = new ArrayList<>();
-        for(Card card: Cards){
-            if (card.getName().contains(keyword)){
-                candidates.add(card);
+    public ArrayList<Integer> getCardsWithKeyword(String keyword){
+        ArrayList<Integer> candidates = new ArrayList<>();
+        for(Integer cardID: cardIDs){
+            if (cardLibrary.getCardNameWithID(cardID).contains(keyword)){
+                candidates.add(cardID);
             }
         }
         return candidates;
     }
 
     /**
-     * This method does not remove cards from the deck
-     * It returns an ArrayList of Cards of the parameter type
-     * @param type
-     * @return ArrayList of Card of Type type
+     * This method does not remove cardIDs from the deck
+     * It returns an ArrayList of Integer of the cards that
+     * matches the parameter type
      */
-    public ArrayList<Card> getCardsOfType(Type type){
-        ArrayList<Card> candidates = new ArrayList<>();
-        for(Card card : Cards){
-            if(card.getType() == type){
-                candidates.add(card);
+    public ArrayList<Integer> getCardsOfType(Type type){
+        ArrayList<Integer> candidates = new ArrayList<>();
+        for(Integer cardID : cardIDs){
+            if(cardLibrary.getCardTypeWithID(cardID) == type){
+                candidates.add(cardID);
             }
         }
         return candidates;
     }
 
     public boolean containCardWithKeyword(String keyword) {
-        for (Card card : Cards) {
-            if (card.getName().contains(keyword)){
+        for (Integer cardID : cardIDs) {
+            if (cardLibrary.getCardNameWithID(cardID).contains(keyword)){
                 return true;
             }
         }
@@ -111,14 +116,15 @@ public class Deck {
     }
 
     public int getNumOfCards(){
-        return Cards.size();
+        return cardIDs.size();
     }
 
     @Override
     public String toString() {
         StringBuilder deckStringBuilder = new StringBuilder();
-        for (Card card : Cards){
-            deckStringBuilder.append(card.toString() + "\n");
+        for (Integer cardID : cardIDs){
+            deckStringBuilder.append(cardLibrary.getCardNameWithID(cardID));
+            deckStringBuilder.append("\n");
         }
         return deckStringBuilder.toString();
     }
