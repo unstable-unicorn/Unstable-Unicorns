@@ -18,6 +18,8 @@ public class CardLibrary {
     private static CardLibrary instance;
     private HashMap<Integer, UnicornCard> unicornCards;
 
+    private CardLibrary(){}
+
     /**
      * I have decided to use YML property file to store all properties of cards.
      * Instead of looking them up inside a MYSQL database.
