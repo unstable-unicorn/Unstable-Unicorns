@@ -12,8 +12,7 @@ public class Deck {
     private static Random random = new Random();
     private ArrayList<Integer> cardIDs = new ArrayList<>();
 
-    public int drawCard() throws DeckEmptyException
-    {
+    public int drawCard() throws DeckEmptyException {
         if (cardIDs.isEmpty()) {
             throw new DeckEmptyException();
         } else {
